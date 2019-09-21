@@ -3,7 +3,6 @@ package br.com.clickbus.places.web.rest;
 import br.com.clickbus.places.domain.Place;
 import br.com.clickbus.places.domain.PlaceDTO;
 import br.com.clickbus.places.domain.SearchParameterDTO;
-import br.com.clickbus.places.domain.converter.impl.PlaceConvert;
 import br.com.clickbus.places.service.PlaceService;
 import br.com.clickbus.places.util.NotFoundException;
 import org.junit.Before;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertSame;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
@@ -32,9 +30,6 @@ public class PlaceResourceTest {
     @Mock
     private PlaceService placeServiceMock;
 
-    @Mock
-    private PlaceConvert convertMock;
-
     private PlaceResource placeResource;
     private PlaceDTO placeDTO;
     private Place place;
@@ -44,9 +39,9 @@ public class PlaceResourceTest {
 
     @Before
     public void context() {
-        this.placeResource = new PlaceResource(placeServiceMock, convertMock);
-        this.placeDTO = new PlaceDTO();
+        this.placeResource = new PlaceResource(placeServiceMock);
         this.place = new Place();
+        this.placeDTO = new PlaceDTO(place);
         this.optionalPlace = Optional.of(place);
         this.searchParameter = new SearchParameterDTO();
         this.places = new ArrayList<>();
@@ -54,15 +49,13 @@ public class PlaceResourceTest {
 
     @Test
     public void shouldCallMethodCreateDelegatingToTheConvertAndCreate() throws URISyntaxException {
-        when(convertMock.convert(placeDTO)).thenReturn(place);
         when(placeServiceMock.create(place)).thenReturn(place);
 
         ResponseEntity resultado = placeResource.create(placeDTO);
 
-        verify(convertMock).convert(placeDTO);
         verify(placeServiceMock).create(place);
         assertEquals(HttpStatus.CREATED, resultado.getStatusCode());
-        assertSame(place, resultado.getBody());
+        assertEquals(placeDTO, resultado.getBody());
     }
 
     @Test
@@ -73,7 +66,7 @@ public class PlaceResourceTest {
 
         verify(placeServiceMock).getSpecific(ID_ONE);
         assertEquals(HttpStatus.OK, resultado.getStatusCode());
-        assertSame(place, resultado.getBody());
+        assertEquals(placeDTO, resultado.getBody());
     }
 
     @Test
@@ -81,7 +74,7 @@ public class PlaceResourceTest {
         when(placeServiceMock.getSpecific(ID_ONE)).thenReturn(Optional.empty());
 
         try{
-            ResponseEntity resultado = placeResource.getSpecific(ID_ONE);
+            placeResource.getSpecific(ID_ONE);
             fail("This method should not be called.");
         } catch (NotFoundException e) {
             assertEquals("No locations found.", e.getMessage());
@@ -90,25 +83,23 @@ public class PlaceResourceTest {
 
     @Test
     public void shouldCallMethodEditDelegatingToTheConvertAndCreate() throws URISyntaxException {
-        when(convertMock.convert(placeDTO)).thenReturn(place);
         when(placeServiceMock.edit(place)).thenReturn(place);
 
         ResponseEntity resultado = placeResource.edit(placeDTO);
 
-        verify(convertMock).convert(placeDTO);
         verify(placeServiceMock).edit(place);
         assertEquals(HttpStatus.CREATED, resultado.getStatusCode());
-        assertSame(place, resultado.getBody());
+        assertEquals(placeDTO, resultado.getBody());
     }
 
     @Test
     public void shouldCallMethodListPlacesFilterByNameDelegatingToTheService() {
-        when(placeServiceMock.listFilterByName(searchParameter)).thenReturn(places);
+        when(placeServiceMock.listFilterByName(searchParameter.getName())).thenReturn(places);
 
         ResponseEntity resultado = placeResource.list(searchParameter);
 
-        verify(placeServiceMock).listFilterByName(searchParameter);
+        verify(placeServiceMock).listFilterByName(searchParameter.getName());
         assertEquals(HttpStatus.OK, resultado.getStatusCode());
-        assertSame(places, resultado.getBody());
+        assertEquals(places, resultado.getBody());
     }
 }

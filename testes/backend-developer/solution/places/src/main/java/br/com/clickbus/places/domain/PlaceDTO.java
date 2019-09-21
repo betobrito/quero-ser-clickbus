@@ -1,9 +1,11 @@
 package br.com.clickbus.places.domain;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-public class PlaceDTO implements Serializable {
+public class PlaceDTO {
 
     private static final long serialVersionUID = 1L;
 
@@ -14,52 +16,61 @@ public class PlaceDTO implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Long getId() {
-        return id;
+    public PlaceDTO(Place place) {
+        this.id = place.getId();
+        this.name = place.getName();
+        this.slug = place.getSlug();
+        this.city = place.getCity();
+        this.createdAt = place.getCreatedAt();
+        this.updatedAt = place.getUpdatedAt();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getSlug() {
         return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public Place transformToObject(){
+        return new Place(this.id, this.name, this.slug, this.city, this.createdAt, this.updatedAt);
     }
 
+    public static PlaceDTO of(Place place){
+        return new PlaceDTO(place);
+    }
+
+    public static List<PlaceDTO> convert(List<Place> places){
+        return places.stream().map(PlaceDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlaceDTO placeDTO = (PlaceDTO) o;
+        return Objects.equals(id, placeDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, slug, city, createdAt, updatedAt);
+    }
 }
