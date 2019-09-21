@@ -2,6 +2,7 @@ package br.com.clickbus.places.web.rest;
 
 import br.com.clickbus.places.domain.Place;
 import br.com.clickbus.places.domain.PlaceDTO;
+import br.com.clickbus.places.domain.SearchParameterDTO;
 import br.com.clickbus.places.domain.converter.impl.PlaceConvert;
 import br.com.clickbus.places.service.PlaceService;
 import br.com.clickbus.places.util.NotFoundException;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertSame;
@@ -36,6 +39,8 @@ public class PlaceResourceTest {
     private PlaceDTO placeDTO;
     private Place place;
     private Optional<Place> optionalPlace;
+    private SearchParameterDTO searchParameter;
+    private List<Place> places;
 
     @Before
     public void context() {
@@ -43,6 +48,8 @@ public class PlaceResourceTest {
         this.placeDTO = new PlaceDTO();
         this.place = new Place();
         this.optionalPlace = Optional.of(place);
+        this.searchParameter = new SearchParameterDTO();
+        this.places = new ArrayList<>();
     }
 
     @Test
@@ -59,7 +66,7 @@ public class PlaceResourceTest {
     }
 
     @Test
-    public void shouldCallMethodGetSpecificPlaceDelegatingToTheService() throws URISyntaxException {
+    public void shouldCallMethodGetSpecificPlaceDelegatingToTheService() {
         when(placeServiceMock.getSpecific(ID_ONE)).thenReturn(optionalPlace);
 
         ResponseEntity resultado = placeResource.getSpecific(ID_ONE);
@@ -70,7 +77,7 @@ public class PlaceResourceTest {
     }
 
     @Test
-    public void shouldCallMethodGetSpecificThrowingExceptionNotFound() throws URISyntaxException {
+    public void shouldCallMethodGetSpecificThrowingExceptionNotFound() {
         when(placeServiceMock.getSpecific(ID_ONE)).thenReturn(Optional.empty());
 
         try{
@@ -95,13 +102,13 @@ public class PlaceResourceTest {
     }
 
     @Test
-    public void shouldCallMethodListPlacesDelegatingToTheService() throws URISyntaxException {
-        when(placeServiceMock.getSpecific(ID_ONE)).thenReturn(optionalPlace);
+    public void shouldCallMethodListPlacesFilterByNameDelegatingToTheService() {
+        when(placeServiceMock.listFilterByName(searchParameter)).thenReturn(places);
 
-        ResponseEntity resultado = placeResource.getSpecific(ID_ONE);
+        ResponseEntity resultado = placeResource.list(searchParameter);
 
-        verify(placeServiceMock).getSpecific(ID_ONE);
+        verify(placeServiceMock).listFilterByName(searchParameter);
         assertEquals(HttpStatus.OK, resultado.getStatusCode());
-        assertSame(place, resultado.getBody());
+        assertSame(places, resultado.getBody());
     }
 }

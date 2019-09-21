@@ -2,6 +2,7 @@ package br.com.clickbus.places.web.rest;
 
 import br.com.clickbus.places.domain.Place;
 import br.com.clickbus.places.domain.PlaceDTO;
+import br.com.clickbus.places.domain.SearchParameterDTO;
 import br.com.clickbus.places.domain.converter.Convert;
 import br.com.clickbus.places.domain.converter.impl.PlaceConvert;
 import br.com.clickbus.places.service.PlaceService;
@@ -60,10 +61,10 @@ public class PlaceResource {
         return ResponseEntity.ok().body(place.orElseThrow(() -> new NotFoundException(MSG_NO_LOCATIONS_FOUND)));
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<List<Place>> list(@PathVariable String name) {
-        log.debug("Rest call method to list places by name: {}", name);
-        List<Place> places = placeService.listFilterByName(name);
+    @PostMapping("/by-name")
+    public ResponseEntity<List<Place>> list(@RequestBody SearchParameterDTO searchParameter) {
+        log.debug("Rest call method to list places by name: {}", searchParameter);
+        List<Place> places = placeService.listFilterByName(searchParameter);
         return ResponseEntity.ok().body(places);
     }
 }

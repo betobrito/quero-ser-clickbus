@@ -1,6 +1,7 @@
 package br.com.clickbus.places.service.impl;
 
 import br.com.clickbus.places.domain.Place;
+import br.com.clickbus.places.domain.SearchParameterDTO;
 import br.com.clickbus.places.service.PlaceService;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<Place> listFilterByName(String name) {
+    public List<Place> listFilterByName(SearchParameterDTO searchParameter) {
         throw new UnsupportedOperationException();
     }
 }
