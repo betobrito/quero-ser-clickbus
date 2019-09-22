@@ -1,6 +1,7 @@
 package br.com.clickbus.places.domain.dto;
 
 import br.com.clickbus.places.domain.Place;
+import br.com.clickbus.places.util.Edit;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
