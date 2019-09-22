@@ -12,13 +12,9 @@ jobs:
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: circleci/postgres:9.6.9-alpine
-        environment:
-          POSTGRES_USER: places
-          POSTGRES_DB: places
-          POSTGRES_PASSWORD:
+      # - image: circleci/postgres:9.4
 
-    working_directory: /testes/backend-developer/solution/places
+    working_directory: ~/testes/backend-developer/solution/places
 
     environment:
       # Customize the JVM maximum heap limit
@@ -41,29 +37,5 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - run: mvn clean install -DskipTests=true
-
-      # - run: mvn liquibase:update -Dliquibase.dropFirst=true
-
       # run tests!
       - run: mvn integration-test
-  deploy:
-    docker:
-      - image: buildpack-deps:trusty
-    steps:
-      - checkout
-      - run:
-          name: Deploy Master to Heroku
-          command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
