@@ -18,7 +18,7 @@ jobs:
           POSTGRES_DB: places
           POSTGRES_PASSWORD:
 
-    working_directory: ~/testes/backend-developer/solution/places
+    working_directory: /testes/backend-developer/solution/places
 
     environment:
       # Customize the JVM maximum heap limit
