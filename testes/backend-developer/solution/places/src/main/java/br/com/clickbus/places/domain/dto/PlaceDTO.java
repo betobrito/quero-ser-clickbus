@@ -1,5 +1,9 @@
-package br.com.clickbus.places.domain;
+package br.com.clickbus.places.domain.dto;
 
+import br.com.clickbus.places.domain.Place;
+import br.com.clickbus.places.util.Edit;
+
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -7,14 +11,17 @@ import java.util.stream.Collectors;
 
 public class PlaceDTO {
 
-    private static final long serialVersionUID = 1L;
-
+    @NotNull(message = "ID parameter is required.")
     private Long id;
+
     private String name;
     private String slug;
     private String city;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public PlaceDTO() {
+    }
 
     public PlaceDTO(Place place) {
         this.id = place.getId();
@@ -49,7 +56,7 @@ public class PlaceDTO {
         return updatedAt;
     }
 
-    public Place transformToObject(){
+    public Place transformToEntity(){
         return new Place(this.id, this.name, this.slug, this.city, this.createdAt, this.updatedAt);
     }
 

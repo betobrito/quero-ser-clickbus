@@ -1,18 +1,39 @@
 package br.com.clickbus.places.domain;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
 public class Place implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "name", length = 200)
     private String name;
+
+    @Column(name = "slug", length = 200)
     private String slug;
+
+    @Column(name = "city", length = 200)
     private String city;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable=false)
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public Place() {}

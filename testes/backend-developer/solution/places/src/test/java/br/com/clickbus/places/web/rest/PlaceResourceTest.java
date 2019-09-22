@@ -1,10 +1,9 @@
 package br.com.clickbus.places.web.rest;
 
 import br.com.clickbus.places.domain.Place;
-import br.com.clickbus.places.domain.PlaceDTO;
-import br.com.clickbus.places.domain.SearchParameterDTO;
+import br.com.clickbus.places.domain.dto.PlaceDTO;
+import br.com.clickbus.places.domain.dto.SearchParameterDTO;
 import br.com.clickbus.places.service.PlaceService;
-import br.com.clickbus.places.util.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +26,7 @@ import static org.mockito.Mockito.when;
 public class PlaceResourceTest {
 
     public static final long ID_ONE = 1L;
+
     @Mock
     private PlaceService placeServiceMock;
 
@@ -60,25 +60,13 @@ public class PlaceResourceTest {
 
     @Test
     public void shouldCallMethodGetSpecificPlaceDelegatingToTheService() {
-        when(placeServiceMock.getSpecific(ID_ONE)).thenReturn(optionalPlace);
+        when(placeServiceMock.find(ID_ONE)).thenReturn(place);
 
-        ResponseEntity resultado = placeResource.getSpecific(ID_ONE);
+        ResponseEntity resultado = placeResource.find(ID_ONE);
 
-        verify(placeServiceMock).getSpecific(ID_ONE);
+        verify(placeServiceMock).find(ID_ONE);
         assertEquals(HttpStatus.OK, resultado.getStatusCode());
         assertEquals(placeDTO, resultado.getBody());
-    }
-
-    @Test
-    public void shouldCallMethodGetSpecificThrowingExceptionNotFound() {
-        when(placeServiceMock.getSpecific(ID_ONE)).thenReturn(Optional.empty());
-
-        try{
-            placeResource.getSpecific(ID_ONE);
-            fail("This method should not be called.");
-        } catch (NotFoundException e) {
-            assertEquals("No locations found.", e.getMessage());
-        }
     }
 
     @Test

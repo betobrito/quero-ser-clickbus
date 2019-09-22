@@ -1,4 +1,4 @@
-package br.com.clickbus.places.domain;
+package br.com.clickbus.places.domain.dto;
 
 import java.io.Serializable;
 

@@ -1,0 +1,11 @@
+version: '2'
+services:
+  places-postgresql:
+    image: postgres:11.3
+    # volumes:
+    #     - ~/volumes/places/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=places
+      - POSTGRES_PASSWORD=
+    ports:
+      - 5432:5432
