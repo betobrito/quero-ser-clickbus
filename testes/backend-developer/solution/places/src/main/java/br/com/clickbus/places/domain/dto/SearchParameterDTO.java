@@ -8,12 +8,15 @@ public class SearchParameterDTO implements Serializable {
 
     private String name;
 
-    public String getName() {
-        return name;
+    public SearchParameterDTO() {
     }
 
-    public void setName(String name) {
+    public SearchParameterDTO(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }
