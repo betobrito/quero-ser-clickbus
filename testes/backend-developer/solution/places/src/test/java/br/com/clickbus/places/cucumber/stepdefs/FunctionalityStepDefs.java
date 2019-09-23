@@ -74,11 +74,19 @@ public class FunctionalityStepDefs extends StepDefs {
         mockPost("/places/", place);
     }
 
-    @Then("should return a place with id {string} and name {string}")
-    public void shouldReturnAPlaceWithIdAndNamed(String id, String name) throws Exception {
+    @Given("Since you should edit a place with the following information: id {string}, name {string}, slug {string} and city {string}")
+    public void sinceYouShouldEditAPlaceWithTheFollowingInformationIdNameSlugAndCity(String id, String name, String slug, String city) throws Exception {
+        PlaceDTO place = new PlaceDTO().id(Long.valueOf(id)).name(name).slug(slug).city(city);
+        mockPut("/places/", place);
+    }
+
+    @Then("should return a place with id {string}, name {string}, slug {string} and city {string}")
+    public void shouldReturnAPlaceWithIdNameSlugAndCity(String id, String name, String slug, String city) throws Exception {
         this.actions.andExpect(status().isCreated());
         final PlaceDTO placeDTO = JsonConverter.asJsonToClass(this.actions.andReturn().getResponse().getContentAsString(), PlaceDTO.class);
         assertEquals(id, placeDTO.getId().toString());
         assertEquals(name, placeDTO.getName());
+        assertEquals(slug, placeDTO.getSlug());
+        assertEquals(city, placeDTO.getCity());
     }
 }

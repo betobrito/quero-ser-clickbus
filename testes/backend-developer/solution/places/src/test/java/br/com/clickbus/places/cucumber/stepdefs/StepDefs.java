@@ -25,6 +25,7 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.util.Lists.newArrayList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @SpringBootTest(properties = "spring.datasource.type=com.zaxxer.hikari.HikariDataSource")
 @AutoConfigureMockMvc
@@ -61,6 +62,10 @@ public abstract class StepDefs {
 
     protected void mockPost(String url, Object content, Object... urlVars) throws Exception {
         actions = perform(content, post(url, urlVars));
+    }
+
+    protected void mockPut(String url, Object content, Object... urlVars) throws Exception {
+        actions = perform(content, put(url, urlVars));
     }
 
     protected List<String> obterMensagensDeErroRetornada() {
