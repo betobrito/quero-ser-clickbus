@@ -66,6 +66,6 @@ public class FunctionalityStepDefs extends StepDefs {
     public void shouldReturnAEmptyList() throws Exception {
         this.actions.andExpect(status().isOk());
         List<PlaceDTO> places = JsonConverter.asJsonToClassList(this.actions.andReturn().getResponse().getContentAsString(), PlaceDTO.class);
-        Assert.assertEquals(NO_RECORDS, places.size());
+        Assert.assertTrue(places.isEmpty());
     }
 }
