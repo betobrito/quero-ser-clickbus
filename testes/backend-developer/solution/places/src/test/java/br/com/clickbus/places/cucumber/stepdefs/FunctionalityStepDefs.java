@@ -7,18 +7,17 @@ import cucumber.api.java.Before;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import org.junit.Assert;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class FunctionalityStepDefs extends StepDefs {
 
     public static final int ONE_RECORD = 1;
-    public static final int NO_RECORDS = 0;
 
     @Before
     public void context() {
@@ -56,16 +55,30 @@ public class FunctionalityStepDefs extends StepDefs {
     public void shouldReturnAListWithAPlaceWithTheCharacteristicsBelow(DataTable dataTable) throws Exception {
         this.actions.andExpect(status().isOk());
         List<PlaceDTO> places = JsonConverter.asJsonToClassList(this.actions.andReturn().getResponse().getContentAsString(), PlaceDTO.class);
-        Assert.assertEquals(ONE_RECORD, places.size());
-        Assert.assertEquals(dataTable.column(0).get(1), places.get(0).getName());
-        Assert.assertEquals(dataTable.column(1).get(1), places.get(0).getSlug());
-        Assert.assertEquals(dataTable.column(2).get(1), places.get(0).getCity());
+        assertEquals(ONE_RECORD, places.size());
+        assertEquals(dataTable.column(0).get(1), places.get(0).getName());
+        assertEquals(dataTable.column(1).get(1), places.get(0).getSlug());
+        assertEquals(dataTable.column(2).get(1), places.get(0).getCity());
     }
 
     @Then("should return a empty list")
     public void shouldReturnAEmptyList() throws Exception {
         this.actions.andExpect(status().isOk());
         List<PlaceDTO> places = JsonConverter.asJsonToClassList(this.actions.andReturn().getResponse().getContentAsString(), PlaceDTO.class);
-        Assert.assertTrue(places.isEmpty());
+        assertTrue(places.isEmpty());
+    }
+
+    @Given("Since you should register a place with the following information: name {string}, slug {string} and city {string}")
+    public void sinceYouShouldRegisterAPlaceWithTheFollowingInformationNameSlugAndCity(String name, String slug, String city) throws Exception {
+        PlaceDTO place = new PlaceDTO().name(name).slug(slug).city(city);
+        mockPost("/places/", place);
+    }
+
+    @Then("should return a place with id {string} and name {string}")
+    public void shouldReturnAPlaceWithIdAndNamed(String id, String name) throws Exception {
+        this.actions.andExpect(status().isCreated());
+        final PlaceDTO placeDTO = JsonConverter.asJsonToClass(this.actions.andReturn().getResponse().getContentAsString(), PlaceDTO.class);
+        assertEquals(id, placeDTO.getId().toString());
+        assertEquals(name, placeDTO.getName());
     }
 }

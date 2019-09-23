@@ -10,7 +10,11 @@ import java.sql.SQLException;
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({NotFoundException.class})
+    public void handleNotFound() {}
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler({SQLException.class, NullPointerException.class})
+    @ExceptionHandler({SQLException.class, NullPointerException.class, RuntimeException.class})
     public void handle() {}
 }

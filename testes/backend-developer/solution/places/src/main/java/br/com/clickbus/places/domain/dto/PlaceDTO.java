@@ -1,7 +1,6 @@
 package br.com.clickbus.places.domain.dto;
 
 import br.com.clickbus.places.domain.Place;
-import br.com.clickbus.places.util.Edit;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -54,6 +53,36 @@ public class PlaceDTO {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public PlaceDTO id(Long id){
+        this.id = id;
+        return this;
+    }
+
+    public PlaceDTO name(String name){
+        this.name = name;
+        return this;
+    }
+
+    public PlaceDTO slug(String slug){
+        this.slug = slug;
+        return this;
+    }
+
+    public PlaceDTO city(String city){
+        this.city = city;
+        return this;
+    }
+
+    public PlaceDTO createdAt(LocalDateTime createdAt){
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public PlaceDTO updatedAt(LocalDateTime updatedAt){
+        this.updatedAt = updatedAt;
+        return this;
     }
 
     public Place transformToEntity(){

@@ -18,7 +18,8 @@ public class HelperContextImpl implements HelperContext {
     }
 
     public void clearTestData() {
-        jdbcTemplate.update("delete from public.place");
+        jdbcTemplate.update("delete from public.place;");
+        jdbcTemplate.update("alter sequence public.place_id_seq restart;");
     }
 
     @Override
