@@ -73,11 +73,11 @@ with the following command:
 
 After the above steps api can be started via command line, execute the following command in the project root:
 
-    ./mvnw - em caso de sistema linux
+    ./mvnw - in case of linux system
     
    Or just:
     
-    mvnw - em caso de sistema windows
+    mvnw - in case of windows system
     
 If you want to generate a project war just run the command below:
 
